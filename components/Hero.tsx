@@ -29,7 +29,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-10 md:pt-0 md:pb-0"
     >
       {/* Background Images Slider */}
       <div className="absolute inset-0">
@@ -69,7 +69,7 @@ export default function Hero() {
       </div>
 
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden hidden md:block">
         <motion.div
           animate={{
             x: mousePosition.x,
@@ -88,7 +88,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-8 md:py-0">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -99,9 +99,9 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="inline-block mb-6"
+            className="inline-block mb-4 md:mb-6"
           >
-            <span className="px-6 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-sm font-semibold border border-white/30 shadow-lg">
+            <span className="px-4 py-1.5 md:px-6 md:py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs md:text-sm font-semibold border border-white/30 shadow-lg">
               🐟 فروشگاه معتبر شیلات
             </span>
           </motion.div>
@@ -111,7 +111,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight px-2"
           >
             <motion.span
               className="block text-white drop-shadow-2xl mb-2"
@@ -136,7 +136,7 @@ export default function Hero() {
             initial={{ width: 0 }}
             animate={{ width: '120px' }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="h-1 bg-gradient-to-r from-transparent via-primary-400 to-transparent mx-auto mb-8 rounded-full"
+            className="h-1 bg-gradient-to-r from-transparent via-primary-400 to-transparent mx-auto mb-6 md:mb-8 rounded-full"
           />
 
           {/* Description */}
@@ -144,7 +144,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-lg md:text-xl lg:text-2xl text-white/95 mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-lg font-medium"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/95 mb-6 md:mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-lg font-medium px-4"
           >
             عرضه کننده انواع ماهی تازه، میگو، غذاهای دریایی، تجهیزات ماهیگیری و
             محصولات مرتبط با صنعت شیلات
@@ -155,21 +155,34 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+            className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center mb-8 md:mb-16 px-4"
           >
             <motion.a
               href="#products"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="group relative px-10 py-4 bg-primary-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-primary-600/50 transition-all hover:bg-primary-700 overflow-hidden"
+              className="group relative w-full max-w-xs sm:w-auto sm:max-w-none px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-primary-600 text-white rounded-full font-bold text-sm sm:text-base md:text-lg shadow-2xl hover:shadow-primary-600/50 transition-all hover:bg-primary-700 overflow-hidden text-center flex items-center justify-center"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-2.5">
                 <span>مشاهده محصولات</span>
                 <motion.span
-                  animate={{ x: [0, 5, 0] }}
+                  animate={{ x: [0, 4, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
+                  className="text-base sm:text-lg md:text-xl font-normal leading-none flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6"
                 >
-                  →
+                  <svg 
+                    width="100%" 
+                    height="100%" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    className="rtl:rotate-180"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
                 </motion.span>
               </span>
               <motion.div
@@ -181,7 +194,7 @@ export default function Hero() {
               href="#about"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="px-10 py-4 bg-white/15 backdrop-blur-lg text-white rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all border-2 border-white/40 hover:bg-white/25 hover:border-white/60"
+              className="w-full max-w-xs sm:w-auto sm:max-w-none px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-white/15 backdrop-blur-lg text-white rounded-full font-bold text-sm sm:text-base md:text-lg shadow-xl hover:shadow-2xl transition-all border-2 border-white/40 hover:bg-white/25 hover:border-white/60 text-center"
             >
               درباره ما
             </motion.a>
@@ -192,7 +205,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
-            className="flex flex-wrap justify-center gap-6 md:gap-8 text-white/90 mb-8"
+            className="flex flex-wrap justify-center gap-3 md:gap-6 lg:gap-8 text-white/90 mb-6 md:mb-8 px-4"
           >
             {[
               { icon: '💳', text: 'پرداخت امن' },
@@ -205,10 +218,10 @@ export default function Hero() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1 + index * 0.1 }}
-                className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20"
+                className="flex items-center gap-1.5 md:gap-2 bg-white/10 backdrop-blur-md px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-white/20"
               >
-                <span className="text-xl">{feature.icon}</span>
-                <span className="text-sm font-medium">{feature.text}</span>
+                <span className="text-lg md:text-xl">{feature.icon}</span>
+                <span className="text-xs md:text-sm font-medium">{feature.text}</span>
               </motion.div>
             ))}
           </motion.div>

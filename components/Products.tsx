@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/context/CartContext'
 
@@ -188,10 +188,16 @@ const products: Product[] = [
 
 export default function Products() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.1 })
+  const isInView = useInView(ref, { once: true, amount: 0.05, margin: '0px 0px -100px 0px' })
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
   const { addToCart } = useCart()
+  const [isMounted, setIsMounted] = useState(true)
+  
+  // Ensure content is visible on mobile - show immediately without waiting for scroll
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const filteredProducts = selectedCategory
     ? products.filter((p) => p.category === selectedCategory)
@@ -225,7 +231,7 @@ export default function Products() {
     <section
       id="products"
       ref={ref}
-      className="py-24 bg-gradient-to-br from-white via-blue-50/50 to-ocean-50/50 relative overflow-hidden"
+      className="py-16 md:py-24 bg-gradient-to-br from-white via-blue-50/50 to-ocean-50/50 relative overflow-hidden"
     >
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -235,14 +241,14 @@ export default function Products() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          initial={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          animate={isInView || isMounted ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            initial={isMounted ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            animate={isInView || isMounted ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
             className="inline-block mb-4"
           >
@@ -267,8 +273,8 @@ export default function Products() {
 
         {/* Category Filter */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          initial={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={isInView || isMounted ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="flex flex-wrap justify-center gap-3 mb-16"
         >
@@ -290,14 +296,14 @@ export default function Products() {
         </motion.div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           {filteredProducts.map((product, index) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              initial={isMounted ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
+              animate={isInView || isMounted ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
               transition={{ 
-                delay: index * 0.05, 
+                delay: isInView ? index * 0.05 : 0, 
                 duration: 0.5,
                 type: "spring",
                 stiffness: 100
@@ -307,9 +313,9 @@ export default function Products() {
               onHoverEnd={() => setHoveredProduct(null)}
               className="group relative"
             >
-              <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100/50 h-full flex flex-col">
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100/50 h-full flex flex-col">
                 {/* Image Section */}
-                <div className="relative h-56 md:h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                <div className="relative h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                   {/* Image */}
                   <motion.div
                     className="relative w-full h-full"
@@ -331,22 +337,22 @@ export default function Products() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                   {/* Category Badge */}
-                  <div className="absolute top-4 right-4 z-10">
-                    <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-primary-600 rounded-full text-xs font-bold shadow-md">
+                  <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10">
+                    <span className="px-2 py-1 sm:px-3 sm:py-1.5 bg-white/95 backdrop-blur-sm text-primary-600 rounded-full text-[10px] sm:text-xs font-bold shadow-md">
                       {getCategoryName(product.category)}
                     </span>
                   </div>
 
                   {/* Stock Badge */}
                   {product.inStock && (
-                    <div className="absolute top-4 left-4 z-10">
+                    <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10">
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2 + index * 0.05 }}
-                        className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5"
+                        className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-[10px] sm:text-xs font-bold shadow-lg flex items-center gap-1 sm:gap-1.5"
                       >
-                        <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></span>
                         موجود
                       </motion.div>
                     </div>
@@ -362,27 +368,27 @@ export default function Products() {
                 </div>
 
                 {/* Content Section */}
-                <div className="p-6 flex-1 flex flex-col">
+                <div className="p-3 sm:p-4 md:p-6 flex-1 flex flex-col">
                   {/* Product Name */}
-                  <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2 line-clamp-2 min-h-[3.5rem]">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-1.5 sm:mb-2 line-clamp-2 min-h-[2.5rem] sm:min-h-[3rem] md:min-h-[3.5rem]">
                     {product.name}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 md:mb-4 line-clamp-2 flex-grow">
                     {product.description}
                   </p>
 
                   {/* Price and Action */}
-                  <div className="mt-auto space-y-4">
+                  <div className="mt-auto space-y-2 sm:space-y-3 md:space-y-4">
                     {/* Price */}
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-xs text-gray-500 mb-1">قیمت</span>
-                        <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
+                        <span className="text-[10px] sm:text-xs text-gray-500 mb-0.5 sm:mb-1">قیمت</span>
+                        <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
                           {formatPrice(product.price)}
                         </span>
-                        <span className="text-sm text-gray-500">تومان</span>
+                        <span className="text-xs sm:text-sm text-gray-500">تومان</span>
                       </div>
                     </div>
 
@@ -392,12 +398,12 @@ export default function Products() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       disabled={!product.inStock}
-                      className="w-full px-6 py-3.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg flex items-center justify-center gap-2 group/btn"
+                      className="w-full px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 group/btn"
                     >
                       {product.inStock ? (
                         <>
                           <svg
-                            className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"
+                            className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -409,7 +415,8 @@ export default function Products() {
                               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                             />
                           </svg>
-                          افزودن به سبد خرید
+                          <span className="hidden sm:inline">افزودن به سبد خرید</span>
+                          <span className="sm:hidden">افزودن</span>
                         </>
                       ) : (
                         'ناموجود'
